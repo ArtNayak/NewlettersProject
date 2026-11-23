@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+*.log
+.remember/
+.DS_Store
+dist/
+build/
+# nested git repo
+/IP5/
