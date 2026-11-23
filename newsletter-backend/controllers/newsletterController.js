@@ -26,7 +26,7 @@ export const getNewsletters = async (req, res) => {
 export const searchNewsletters = async (req, res) => {
   try {
     const { q } = req.query;
-    const regex = new RegExp(q, "i"); // case-insensitive search
+    const regex = new RegExp(String(q ?? "").slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"); // case-insensitive search
     const results = await Newsletter.find({
       $or: [{ title: regex }, { description: regex }, { content: regex }],
     }).sort({ createdAt: -1 });

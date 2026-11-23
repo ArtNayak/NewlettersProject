@@ -28,6 +28,7 @@ MONGO_URI=<mongodb connection string>
 JWT_SECRET=<random string>
 EMAIL_USER=<smtp user>
 EMAIL_PASS=<smtp password>
+FACULTY_INVITE_CODE=<secret code required to register faculty>
 ```
 
 ### API routes

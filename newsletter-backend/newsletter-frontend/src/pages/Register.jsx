@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 
 const Register = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", inviteCode: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,6 +22,7 @@ const Register = () => {
         <input name="name" placeholder="Name" className="border p-2 w-full mb-3 rounded" onChange={handleChange} />
         <input name="email" placeholder="Email" className="border p-2 w-full mb-3 rounded" onChange={handleChange} />
         <input type="password" name="password" placeholder="Password" className="border p-2 w-full mb-3 rounded" onChange={handleChange} />
+        <input name="inviteCode" placeholder="Invite code" className="border p-2 w-full mb-3 rounded" onChange={handleChange} />
         <button className="bg-green-600 text-white px-4 py-2 rounded w-full">Register</button>
       </form>
     </div>

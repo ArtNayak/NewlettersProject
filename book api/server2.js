@@ -15,7 +15,7 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger);
 
-passport.use(new LocalStrategy((username, password, done) => {
+passport.use(new LocalStrategy(async (username, password, done) => {
 
   const user = users.find(u => u.username === username);
 
@@ -23,7 +23,7 @@ passport.use(new LocalStrategy((username, password, done) => {
       return done(null, false, { message: 'Incorrect Username' });
   }
 
-  const isMatch=bcrypt.compare(password,user.password);
+  const isMatch=await bcrypt.compare(password,user.password);
   if (!isMatch) {
       return done(null, false, { message: 'Incorrect Password' });
   }

@@ -1,5 +1,8 @@
 const express = require('express');
 const book = require('./models/Book');
+const authMiddleware = require('./moddleware/authMiddleware');
+
+const pick = (b) => ({ name: b.name, author: b.author, publisher: b.publisher, imamge: b.imamge, quantity: b.quantity, category: b.category });
 
 const router = express.Router();
 
@@ -28,10 +31,10 @@ router.get('/books/:id', async (req, res) => {
 });
 
 // add a new book
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
     try {
-        const newBook = new book(req.body);
-        await book.save();
+        const newBook = new book(pick(req.body));
+        await newBook.save();
         res.status(201).json({ message: 'Book added successfully' });
     } catch (error) {
         res.status(500).json(error);
@@ -39,20 +42,20 @@ router.post('/', async (req, res) => {
 });
 
 // update a book
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
 try {
-    const bookId = await book.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const bookId = await book.findByIdAndUpdate(req.params.id, pick(req.body), { new: true });
     if (!bookId) {
         return res.status(404).json({ message: 'Book not found' });
     }
-    express.response.status(200).json({ message: 'Book updated successfully' });
+    res.status(200).json({ message: 'Book updated successfully' });
 }catch(error){
     res.status(500).json(error);
 }
 });
 
 // delete a book
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
     try {
         const bookId = await book.findByIdAndDelete(req.params.id);
         if (!bookId) {

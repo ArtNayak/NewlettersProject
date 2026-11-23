@@ -58,7 +58,7 @@ router.post('/login',async(request,response)=>{
             username:user.username,
             email:user.email,
             userType:user.userType
-        },"elevatecoders",{expiresIn:'1hr'});
+        },process.env.JWT_SECRET,{expiresIn:'1hr'});
     }catch(error){
         response.status(500).json(error);
     }

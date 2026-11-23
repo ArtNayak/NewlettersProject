@@ -15,7 +15,7 @@ const requestLogger = (request, response, next) => {
 
 app.use(requestLogger);
 
-passport.use(new LocalStrategy((username, password, done) => {
+passport.use(new LocalStrategy(async (username, password, done) => {
 
   const user = users.find(u => u.username === username);
 
@@ -23,7 +23,7 @@ passport.use(new LocalStrategy((username, password, done) => {
       return done(null, false, { message: 'Incorrect Username' });
   }
 
-  const isMatch=bcrypt.compare(password,user.password);
+  const isMatch=await bcrypt.compare(password,user.password);
   if (!isMatch) {
       return done(null, false, { message: 'Incorrect Password' });
   }
@@ -96,7 +96,7 @@ app.delete('/colleges/:id',isAuthenticated,  (req, res) => {
 });
 
 app.get('/users',isAuthenticated, (req, res) => {
-  res.json(users);
+  res.json(users.map(({ password, ...u }) => u));
 });
 
 app.get('/users/:id',isAuthenticated,  (req, res) => {
@@ -104,7 +104,8 @@ app.get('/users/:id',isAuthenticated,  (req, res) => {
   if (!user) {
     return res.status(404).send('User not found');
   }
-  res.json(user);
+  const { password, ...safe } = user;
+  res.json(safe);
 });
 
 app.post('/users',async (req, res) => {
@@ -115,8 +116,7 @@ app.post('/users',async (req, res) => {
     password: hashedPassword
   };
   users.push(newUser);
-  console.log("Users :- ",users);
-  res.status(201).json(newUser);
+  res.status(201).json({ id: newUser.id, username: newUser.username });
 });
 
 app.listen(port, () => {

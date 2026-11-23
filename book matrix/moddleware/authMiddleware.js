@@ -8,7 +8,7 @@ const authMiddleware=(request,response,next)=>{
     }
 
     try{
-        const decoded=jwt.verify(token,"elevatecoders");
+        const decoded=jwt.verify(token,process.env.JWT_SECRET);
         request.user=decoded;
         next();
     }
